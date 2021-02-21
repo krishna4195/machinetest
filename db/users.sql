@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 20, 2021 at 08:44 AM
+-- Generation Time: Feb 21, 2021 at 10:38 AM
 -- Server version: 5.7.31-0ubuntu0.18.04.1
 -- PHP Version: 5.6.40-14+ubuntu18.04.1+deb.sury.org+1
 
@@ -17,32 +17,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `crud`
+-- Database: `users`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `crud`
---
-
-CREATE TABLE `crud` (
-  `id` int(11) NOT NULL,
-  `name` varchar(60) NOT NULL,
-  `email` varchar(30) NOT NULL,
-  `phone` varchar(20) NOT NULL,
-  `city` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `crud`
---
-
-INSERT INTO `crud` (`id`, `name`, `email`, `phone`, `city`) VALUES
-(40, 'divya', 'amohapatra7000@gmail.com', '9114950911', 'balasore'),
-(42, 'Divyasundar sahu', 'amohapatra7000@gmail.com', '999999999', 'balasore'),
-(58, 'adsf', 'asdf@ag/.com', 'asdfasdf', ''),
-(59, 'asdferer', 'krishna@gmail.com', '123123123', '');
 
 -- --------------------------------------------------------
 
@@ -52,40 +28,42 @@ INSERT INTO `crud` (`id`, `name`, `email`, `phone`, `city`) VALUES
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `profile_image` varchar(255) NOT NULL,
-  `bio` text NOT NULL
+  `name` varchar(60) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `filename` varchar(250) NOT NULL,
+  `user_type` int(11) NOT NULL DEFAULT '0',
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `filename`, `user_type`, `created_date`) VALUES
+(64, 'admin', 'admin@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '1234567891', '1613849190', 1, '2021-02-21 02:09:58');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `crud`
---
-ALTER TABLE `crud`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `crud`
---
-ALTER TABLE `crud`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
---
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

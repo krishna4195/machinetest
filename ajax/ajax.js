@@ -1,55 +1,50 @@
 function readURL(input) {
-	var ext = input.split(".");
-		ext = ext[ext.length-1].toLowerCase();      
-		var arrayExtensions = ["jpg" , "jpeg", "png", "bmp", "gif"];
-		
-	if (input.files && input.files[0]) {
-		var reader = new FileReader();
-		
-		if (arrayExtensions.lastIndexOf(ext) == -1) {
-			alert("Wrong extension type.");
-			$("#image").val("");
-		}
-		if(ext == "jpg" || ext == "png" || ext == "jpeg"){
-		reader.onload = function (e) {
-			$('#blah')
-				.attr('src', e.target.result)
-				.width(150)
-				.height(200);
-				$('#blah').css("display","block");
-		};
-		}
+	var ext = $(".userimage").val().split('.').pop();
+    if(ext=='png'||ext=='jpeg'||ext=='jpg'||ext=='gif'){
+		$('#blah').css("display","block");
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+			
+			reader.onload = function (e) {
+				$('#blah').attr('src', e.target.result);
+			};
 
-		reader.readAsDataURL(input.files[0]);
+			reader.readAsDataURL(input.files[0]);
+		}
 	}
 }
-	$(document).on('click','#btn-add',function(e) {
-		var filtername="";
-		var filterphone="";
-		filtername=$('#name').val();
-		filterphone=$('#phone').val();
-		if(filtername == '')
-         {
-         //$('.error').html('Enter the filter Name')
-         $('#filterErr').show();
-         
-         }
-         else if(filterphone == '')
-         {
-         //$('.error').html('Enter the filter Name')
-         $('#filterphoneErr').show();
-         
-         }
-         else
-         {
-         $('#filterErr').hide();
-         $('#filterphoneErr').hide();
-		var data = $("#user_form").serialize();
+$(function() {
+	
+	$("#user_form").validate({
+	  rules: {
+		name: "required",
+		email: {
+		  required: true,
+		  email: true
+		},
+		phone: {
+			required: true,
+			maxlength:10
+		  },
+		
+	  },
+	  messages: {
+		 name: "Please enter your name",
+		 email: "Please enter a valid email address",
+		 phone: "Please enter a phone number"
+
+	  },
+	   submitHandler: function(form) {
+		//form.submit();
 		$.ajax({
-			data: data,
+			data:  new FormData(form),
+			contentType: false,
+			cache: false,
+			processData:false,
 			type: "post",
 			url: "backend/save.php",
 			success: function(dataResult){
+				
 					var dataResult = JSON.parse(dataResult);
 					if(dataResult.statusCode==200){
 						$('#addEmployeeModal').modal('hide');
@@ -61,39 +56,35 @@ function readURL(input) {
 					}
 			}
 		});
-		}
+	  }
 	});
-	
-	// $('input[name="email"]').on("keypress",function () {
-		
-	// 	var email = $(this).val();
-	// 	alert(email);
-	// var re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
-	// if (re.test(email)) {
-	// 	// $('.msg').hide();
-	// 	// $('.success').show();
-	// } else {
-	// 	$('#filteremailformatErr').show();
-	// }
-	
-	// });
-	$(document).on('click','.update',function(e) {
-		var id=$(this).attr("data-id");
-		var name=$(this).attr("data-name");
-		var email=$(this).attr("data-email");
-		var phone=$(this).attr("data-phone");
-		var city=$(this).attr("data-city");
-		$('#id_u').val(id);
-		$('#name_u').val(name);
-		$('#email_u').val(email);
-		$('#phone_u').val(phone);
-		$('#city_u').val(city);
-	});
-	
-	$(document).on('click','#update',function(e) {
-		var data = $("#update_form").serialize();
-		$.ajax({
-			data: data,
+	$("#update_form").validate({
+		rules: {
+		  name: "required",
+		  email: {
+			required: true,
+			email: true
+		  },
+		  phone: {
+			  required: true,
+			  maxlength:10
+			  
+			},
+		  
+		},
+		messages: {
+		   name: "Please enter your name",
+		   email: "Please enter a valid email address",
+		   phone: "Please enter a phone number"
+  
+		},
+		 submitHandler: function(form) {
+		  //form.submit();
+		  $.ajax({
+			data:  new FormData(form),
+			contentType: false,
+			cache: false,
+			processData:false,
 			type: "post",
 			url: "backend/save.php",
 			success: function(dataResult){
@@ -108,7 +99,23 @@ function readURL(input) {
 					}
 			}
 		});
+		}
+	  });
+  });
+
+	$(document).on('click','.update',function(e) {
+		var id=$(this).attr("data-id");
+		var name=$(this).attr("data-name");
+		var email=$(this).attr("data-email");
+		var phone=$(this).attr("data-phone");
+		var city=$(this).attr("data-city");
+		$('#id_u').val(id);
+		$('#name_u').val(name);
+		$('#email_u').val(email);
+		$('#phone_u').val(phone);
+		$('#city_u').val(city);
 	});
+	
 	$(document).on("click", ".delete", function() { 
 		var id=$(this).attr("data-id");
 		$('#id_d').val(id);
@@ -126,6 +133,7 @@ function readURL(input) {
 			success: function(dataResult){
 					$('#deleteEmployeeModal').modal('hide');
 					$("#"+dataResult).remove();
+					location.reload();
 			
 			}
 		});
